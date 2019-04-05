@@ -58,21 +58,15 @@ const error = (message: string) => {
     console.log(chalk.red(message)); // tslint:disable-line
 };
 
-const typeOrmConfigPath = path.resolve(commander.config);
+// const typeOrmConfigPath = path.resolve(commander.config);
 
-if (!fs.existsSync(typeOrmConfigPath)) {
-    throw new Error(`TypeOrm config ${typeOrmConfigPath} not found`);
-}
+// if (!fs.existsSync(typeOrmConfigPath)) {
+//     throw new Error(`TypeOrm config ${typeOrmConfigPath} not found`);
+// }
 
 debug('Connection to database...');
 
-createConnection(
-    {
-        root: path.dirname(typeOrmConfigPath),
-        configName: path.basename(typeOrmConfigPath, path.extname(typeOrmConfigPath)),
-    },
-    commander.connection,
-)
+createConnection(commander.connection)
     .then(async connection => {
         debug('Database is connected');
 
@@ -106,6 +100,8 @@ createConnection(
 
         for (const fixture of fixturesIterator(fixtures)) {
             const entity = await builder.build(fixture);
+            debug(``);
+            debug(`Processing: ${entity.constructor.name} '${fixture.name}' with entity name '${fixture.entity}'`);
 
             try {
                 bar.increment(1, { name: fixture.name });

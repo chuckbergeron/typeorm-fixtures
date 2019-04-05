@@ -40,6 +40,8 @@ export class Loader {
             if (loader) {
                 const fixtureConfig: IFixturesConfig = loader.load(file);
                 const { error } = Joi.validate(fixtureConfig, jFixturesSchema);
+                // console.log('error');
+                // console.log(error);
 
                 if (error) {
                     throw new Error(`Invalid fixtures config. File "${file}"`);
